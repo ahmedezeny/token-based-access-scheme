@@ -1,4 +1,6 @@
 package com.company;
+import com.company.Interfaces.IQueue;
+
 import java.io.IOException;
 import java.lang.*;
 import java.sql.Timestamp;
@@ -9,10 +11,10 @@ import static com.company.utils.getRandomBetween;
 public class QueuesManager implements Runnable {
 
     private Thread t;
-    private Queue q3;
-    private Queue q2 ;
-    private Queue q1 ;
-    private Queue current;
+    private IQueue q3;
+    private IQueue q2 ;
+    private IQueue q1 ;
+    private IQueue current;
     private static QueuesManager manager;
 
     QueuesManager(int T){
@@ -26,9 +28,13 @@ public class QueuesManager implements Runnable {
     }
 
     public void start() throws InterruptedException {
-        setupPacketsSpawner();
-        current.process();
 
+        setupPacketsSpawner();
+        long endTime = System.currentTimeMillis()+(15000);
+        while(System.currentTimeMillis() < endTime) {
+            current.process();
+            current = current.getNext();
+        }
     }
 
     public static QueuesManager getInstance(int T) throws IOException {
@@ -50,7 +56,7 @@ public class QueuesManager implements Runnable {
         t.start();
     }
 
-    private Queue getQueueNumbered(int i){
+    private IQueue getQueueNumbered(int i){
         switch (i) {
             case 1:
                 return q1;
@@ -62,9 +68,11 @@ public class QueuesManager implements Runnable {
     }
 
     public void run() {
-        Queue q;
+        IQueue q;
         int queueNumber;
-        while(true) {
+        long endTime = System.currentTimeMillis()+(3000);
+        while (System.currentTimeMillis()<endTime) {
+        //while(true) {
 
             queueNumber = (int) utils.getRandomBetween(1, 3);
             q = getQueueNumbered(queueNumber);
@@ -76,7 +84,7 @@ public class QueuesManager implements Runnable {
             System.out.println(t +" packet Arrival - queue #: " + queueNumber + " # customers: " + q.getCustomers() );
 
             try {
-                TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(1, 4));
+                TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 1));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

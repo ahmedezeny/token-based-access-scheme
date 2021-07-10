@@ -69,21 +69,22 @@ public class Queue implements IQueue {
 
     @Override
     public void process() throws InterruptedException {
-        long endTime = System.currentTimeMillis()+(30*1000);
-        while (System.currentTimeMillis()<endTime) {
-            long time = System.currentTimeMillis();
-            this.departTime = time + this.T;
-            while (time < this.getDepartTime() && this.getCustomers() != 0) {
-                TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 2));
-                this.removeCustomer();
-                time = System.currentTimeMillis();
-                Timestamp t = new Timestamp(time);
-                System.out.println(t + " service completion - queue #: " + this.ID + " # customers: " + this.getCustomers());
-            }
+        TimeUnit.SECONDS.sleep(3);
+
+        long time = System.currentTimeMillis();
+        this.departTime = time + this.T;
+        while (System.currentTimeMillis() < this.getDepartTime() && this.getCustomers() != 0) {
+            TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 1));
+            this.removeCustomer();
             time = System.currentTimeMillis();
             Timestamp t = new Timestamp(time);
-            System.out.println(t + " token surrender - queue #: " + this.ID + " # customers: " + this.getCustomers());
+            System.out.println(t + " service completion - queue #: " + this.ID + " # customers: " + this.getCustomers());
         }
+        TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 1));
+        time = System.currentTimeMillis();
+        Timestamp t = new Timestamp(time);
+        System.out.println(t + " token surrender - queue #: " + this.ID + " # customers: " + this.getCustomers());
+
     }
 
     @Override
