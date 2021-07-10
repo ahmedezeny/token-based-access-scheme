@@ -9,31 +9,31 @@ import static com.company.utils.getRandomBetween;
 public class QueuesManager implements Runnable {
 
     private Thread t;
-    private int T;
     private Queue q3;
     private Queue q2 ;
     private Queue q1 ;
     private Queue current;
     private static QueuesManager manager;
 
-    QueuesManager(){
-        q3 = new Queue(3);
-        q2 = new Queue(2, q3);
-        q1 = new Queue(1, q2);
+    QueuesManager(int T){
+        q3 = new Queue(3,T);
+        q2 = new Queue(2, q3,T);
+        q1 = new Queue(1, q2,T);
         q3.setNext(q1);
         current = q1;
 
 
     }
 
-    private void start() throws InterruptedException {
+    public void start() throws InterruptedException {
         setupPacketsSpawner();
         current.process();
+
     }
 
-    private static QueuesManager getInstance() throws IOException {
+    public static QueuesManager getInstance(int T) throws IOException {
         if (manager == null) {
-            manager = new QueuesManager();
+            manager = new QueuesManager(T);
         }
         return manager;
     }

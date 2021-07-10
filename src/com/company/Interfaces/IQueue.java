@@ -14,6 +14,8 @@ public interface IQueue {
     public  int getCustomers();
     public long getDepartTime() ;
 
+    public long getInBetweenTime() ;
+
     public void process() throws InterruptedException;
 
     public void setDepartTime(long departTime) ;

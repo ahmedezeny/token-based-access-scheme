@@ -1,26 +1,27 @@
 package com.company;
 
 import com.company.Interfaces.IQueue;
-
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
 public class Queue implements IQueue {
     private IQueue next;
     private int ID;
-
+    private int T;
     private int customers;
     private long departTime;
 
 
 
-    public  Queue(int id){
+    public  Queue(int id, int T){
         this.ID = id;
         this.next = null;
+        this.T = T;
     }
-    public Queue(int id, IQueue next) {
+    public Queue(int id, IQueue next, int T) {
         this.ID = id;
         this.next = next;
+        this.T = T;
     }
 
 
@@ -62,18 +63,27 @@ public class Queue implements IQueue {
     }
 
     @Override
+    public long getInBetweenTime() {
+        return this.T;
+    }
+
+    @Override
     public void process() throws InterruptedException {
-        long time = System.currentTimeMillis();
-        while (time < this.getDepartTime() && this.getCustomers()!=0){
-            TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 2));
-            this.removeCustomer();
+        long endTime = System.currentTimeMillis()+(30*1000);
+        while (System.currentTimeMillis()<endTime) {
+            long time = System.currentTimeMillis();
+            this.departTime = time + this.T;
+            while (time < this.getDepartTime() && this.getCustomers() != 0) {
+                TimeUnit.SECONDS.sleep((long) utils.getRandomBetween(0, 2));
+                this.removeCustomer();
+                time = System.currentTimeMillis();
+                Timestamp t = new Timestamp(time);
+                System.out.println(t + " service completion - queue #: " + this.ID + " # customers: " + this.getCustomers());
+            }
             time = System.currentTimeMillis();
             Timestamp t = new Timestamp(time);
-            System.out.println(t +" service completion - queue #: " + this.ID + " # customers: " + this.getCustomers() );
+            System.out.println(t + " token surrender - queue #: " + this.ID + " # customers: " + this.getCustomers());
         }
-        time = System.currentTimeMillis();
-        Timestamp t = new Timestamp(time);
-        System.out.println(t +" token surrender - queue #: " + this.ID + " # customers: " + this.getCustomers() );
     }
 
     @Override
