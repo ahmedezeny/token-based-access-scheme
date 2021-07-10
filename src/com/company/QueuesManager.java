@@ -30,6 +30,7 @@ public class QueuesManager implements Runnable {
     public void start() throws InterruptedException {
 
         setupPacketsSpawner();
+        TimeUnit.SECONDS.sleep(3);
         long endTime = System.currentTimeMillis()+(15000);
         while(System.currentTimeMillis() < endTime) {
             current.process();

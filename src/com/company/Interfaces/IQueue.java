@@ -18,7 +18,6 @@ public interface IQueue {
 
     public void process() throws InterruptedException;
 
-    public void setDepartTime(long departTime) ;
-    public void start(int t);
+
 
 }

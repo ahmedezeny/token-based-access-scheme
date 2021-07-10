@@ -69,7 +69,7 @@ public class Queue implements IQueue {
 
     @Override
     public void process() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(3);
+
 
         long time = System.currentTimeMillis();
         this.departTime = time + this.T;
@@ -87,13 +87,5 @@ public class Queue implements IQueue {
 
     }
 
-    @Override
-    public void setDepartTime(long departTime) {
-        this.departTime = departTime;
-    }
 
-    @Override
-    public void start(int t) {
-        setDepartTime(System.nanoTime() + (t*1000));
-    }
 }
